@@ -1,0 +1,10 @@
+Collection of libraries for HPC in the D language
+
+At an early stage, definitely NOT ready for use
+
+o MPI - using a thin C wrapper to interface with variety of MPI implementations
+        Very basic code working
+
+o PETSc - Only very beginning
+
+
