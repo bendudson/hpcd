@@ -1,0 +1,8 @@
+
+
+# Specify MPI C compiler
+CC = @MPICC@
+
+# Specify D compiler
+DC = @DC@
+

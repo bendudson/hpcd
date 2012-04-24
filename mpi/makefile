@@ -1,12 +1,12 @@
 
-SOURCED = mpi.d mpi_test.d
+SOURCED = mpi.d example_01.d
 TARGET = mpi
 
 OBJD = $(SOURCED:%.d=%.o)
 
-CC = mpicc
-DC = dmd
-LIBS = -lphobos2
+include ../make.config
+
+LIBS = -lphobos2 -lrt
 
 $(TARGET): $(OBJD) mpiwrap.o
 	$(CC) -o $(TARGET) $(OBJD) mpiwrap.o  $(LIBS)
