@@ -39,7 +39,7 @@ int main(string[] args) {
     
     if( n == 0 )
       break;
-
+    
     double h   = 1.0 / n, sum = 0.0;
     for (int i = myid + 1; i <= n; i += numprocs) { 
       double x = h * (i - 0.5); 

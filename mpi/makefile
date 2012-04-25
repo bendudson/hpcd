@@ -1,20 +1,8 @@
 
-SOURCED = mpi.d example_01.d
-TARGET = mpi
+SOURCED = mpi.d
+SOURCEC = mpiwrap.c
 
-OBJD = $(SOURCED:%.d=%.o)
+LIBTARGET = libmpi.lib
 
 include ../make.config
-
-LIBS = -lphobos2 -lrt
-
-$(TARGET): $(OBJD) mpiwrap.o
-	$(CC) -o $(TARGET) $(OBJD) mpiwrap.o  $(LIBS)
-
-# Compile a thin wrapper around the MPI library
-mpiwrap.o: mpiwrap.c
-	$(CC) -o $@ -c $<
-
-%.o: %.d
-	$(DC) -c $<
 

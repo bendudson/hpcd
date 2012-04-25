@@ -6,3 +6,51 @@ CC = @MPICC@
 # Specify D compiler
 DC = @DC@
 
+DLIBS = -lphobos2 -lrt
+
+AR = ar
+RANLIB = ranlib
+
+####################################################################
+# Rules for compiling D and C source files
+####################################################################
+
+OBJD = $(SOURCED:%.d=%.o)
+OBJC = $(SOURCEC:%.c=%.c.o)
+
+%.c.o: %.c
+	$(CC) -o $@ -c $< $(CINCLUDE)
+
+%.o: %.d
+	$(DC) -H -c $< $(DINCLUDE)
+
+.PHONY: all
+all: $(DIRS) $(TARGET) $(LIBTARGET)
+
+####################################################################
+# Recursively run make through subdirs
+####################################################################
+
+.PHONY: $(DIRS)
+$(DIRS):
+	@echo "   making directory " $@
+	@$(MAKE) --no-print-directory -C $@ all
+
+####################################################################
+# Library target
+####################################################################
+
+$(LIBTARGET): $(OBJD) $(OBJC) makefile ../make.config
+	$(AR) cru $(LIBTARGET) $(OBJD) $(OBJC)
+	$(RANLIB) $(LIBTARGET)
+
+
+####################################################################
+# Clean directories
+####################################################################
+
+.PHONY: clean
+clean:
+	-@rm -f $(OBJC) $(OBJD) $(TARGET) $(LIBTARGET)
+	@for pp in $(DIRS); do echo "  " $$pp cleaned; $(MAKE) --no-print-directory -C $$pp clean; done
+
