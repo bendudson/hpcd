@@ -1,5 +1,5 @@
 
-DIRS = mpi examples
+DIRS = mpi petsc examples
 
 include make.config
 

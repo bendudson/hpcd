@@ -1,23 +1,22 @@
 // Wrapper around petscsys.h
 
-public import petsc.mpi 
+import std.algorithm, std.array, std.string;
 
-import std.algorithm
+alias int PetscErrorCode;
 
-
-typedef int PetscErrorCode;
-
-extern(C) {
-  PetscErrorCode PetscInitialize(int*,char***,const char[],const char[]);
+// Note: Can be either C++ or C 
+extern(C++) {
+  PetscErrorCode PetscInitialize(int*,char***,const char*,const char*);
+  PetscErrorCode PetscFinalize();
 }
 
 // A wrapper to convert D's arguments to C style
 // and handle ierr
 void PetscInitialize(string[] args) {  
   int argc = args.length;
-  const char** argv = array(map!toStringz(args)).ptr;
+  char** argv = cast(char**) array(map!toStringz(args)).ptr;
 
-  int ierr = PetscInitialize(&argc, &argv, 0, 0);
+  int ierr = PetscInitialize(&argc, &argv, null, null);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -25,14 +24,6 @@ void PetscInitialize(string[] args) {
 //
 ///////////////////////////////////////////////////////////////
 
-extern PetscErrorCode   PetscPrintf(MPI_Comm,const char[],...);
 
 
-void PetscPrintf() {
-
-}
-
-PetscFinalize() {
-
-}
 
