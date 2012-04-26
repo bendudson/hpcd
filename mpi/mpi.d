@@ -1,8 +1,14 @@
 // Some basic MPI routines
+//
+//
+
+module mpi.mpi;
 
 import std.algorithm, std.array, std.string;
 
 // Type declarations. Internal structure not needed, only the address
+// Note: C++ name mangling puts the implementation-specific structure names
+// in the function calls. This means things like omp_communicator_t need to be defined
 alias void* MPI_Comm;
 alias void* MPI_Datatype;
 alias void* MPI_Errhandler;
@@ -26,7 +32,9 @@ struct MPI_Status {
 
 // MPI_Aint not yet defined so some functions missing
 
+//////////////////////////////////////////////////////////////////////
 // MPI external functions
+// Define the MPI interface
 extern(C) {
   int MPI_Abort(MPI_Comm comm, int errorcode);
   
@@ -541,21 +549,8 @@ extern(C) {
   MPI_Op mpiwrap_get_mpi_replace();
 }
 
-//////////////////////////////////////////////////////////////////////
-// Wrapper functions to avoid use of pointers and convert
-// error codes to exceptions
-
-void MPI_Init(string[] args) {
-  // Convert arguments to C form
-  int argc = args.length;
-  char** argv = cast(char**) array(map!toStringz(args)).ptr;
-
-  // Call C function
-  if( MPI_Init(&argc, &argv) ) {
-    // Convert error code to an exception
-    throw new Exception("Failed to initialise MPI");
-  }
-  
+// Call this to set global variables
+void MPI_Get_globals() {
   MPI_COMM_WORLD     = mpiwrap_get_mpi_comm_world();
   MPI_COMM_SELF      = mpiwrap_get_mpi_comm_self();
   
@@ -585,6 +580,24 @@ void MPI_Init(string[] args) {
   MPI_MAXLOC  = mpiwrap_get_mpi_maxloc();
   MPI_MINLOC  = mpiwrap_get_mpi_minloc();
   MPI_REPLACE = mpiwrap_get_mpi_replace();
+}
+
+//////////////////////////////////////////////////////////////////////
+// Wrapper functions to avoid use of pointers and convert
+// error codes to exceptions
+
+void MPI_Init(string[] args) {
+  // Convert arguments to C form
+  int argc = args.length;
+  char** argv = cast(char**) array(map!toStringz(args)).ptr;
+
+  // Call C function
+  if( MPI_Init(&argc, &argv) ) {
+    // Convert error code to an exception
+    throw new Exception("Failed to initialise MPI");
+  }
+  // Set globals
+  MPI_Get_globals();
 }
 
 int MPI_Comm_rank(MPI_Comm comm) {

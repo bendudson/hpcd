@@ -1,5 +1,7 @@
+TOP = ..
 
-SOURCED = sys.d
+SOURCED = sys.d error.d
+EXTRAOBJ = ../mpi/libmpi.lib
 
 LIBTARGET = libpetsc.lib
 

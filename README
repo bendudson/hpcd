@@ -1,10 +1,24 @@
-Collection of libraries for HPC in the D language
-
-At an early stage, definitely NOT ready for use
+Collection of libraries for HPC in the D language (D2)
 
 o MPI - using a thin C wrapper to interface with variety of MPI implementations
-        Very basic code working
+        Most commonly used functions working, but NOT:
+          - Any involving user callbacks e.g. getting and setting error handlers
+          - MPI_Aint types and associated functions e.g. MPI_Address, MPI_Put, MPI_Get
+          - MPI IO file operations
 
-o PETSc - Only very beginning
+o PETSc - Some basic examples working (petscsys)
+
+
+Intended to work with a range of MPI implementations e.g. Open MPI, MPICH, LAM etc.
+
+NOTE: Should be linked against C versions of these libraries, not
+      C++. PETSc should be compiled with Clanguage = C.
+      This is due to name mangling which pulls MPI implementation specific
+      names (e.g. omp_communicator_t) into the function names.
+
+Tested with configurations:
+  - DMD32 D Compiler v2.059, Open MPI and gcc version 4.4.5 (Debian 4.4.5-8)
+
+
 
 

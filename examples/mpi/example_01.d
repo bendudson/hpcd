@@ -8,7 +8,7 @@
  *
  */
 
-import mpi;
+import mpi.mpi;
 import std.stdio;
 import std.conv : parse;
 import std.math : abs;

@@ -9,7 +9,7 @@
  * 
  */
 
-import mpi;
+import mpi.mpi;
 import std.stdio;
 import std.string;
 

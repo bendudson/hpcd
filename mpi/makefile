@@ -1,3 +1,4 @@
+TOP = ..
 
 SOURCED = mpi.d
 SOURCEC = mpiwrap.c
