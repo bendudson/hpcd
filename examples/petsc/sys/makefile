@@ -1,7 +1,7 @@
 
-SOURCED = ex2.d
+SOURCED = ex3.d
 
-PETSCTARGET = ex2
+PETSCTARGET = ex3
 
 PETSCLIBS = ${PETSC_KSP_LIB}
 
@@ -12,7 +12,7 @@ LIBS =  $(TOP)/petsc/libpetsc.lib $(TOP)/mpi/libmpi.lib $(DLIBS)
 .PHONY:all
 all: $(PETSCTARGET)
 
-$(PETSCTARGET): ex2.o
+$(PETSCTARGET): ex3.o
 	-${CLINKER} -o $(PETSCTARGET) $(OBJC) $(OBJD) $(LIBS) $(PETSCLIBS) 
 
 include $(TOP)/make.config

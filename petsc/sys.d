@@ -6,8 +6,9 @@ import std.algorithm, std.array, std.string;
 
 public import mpi.mpi;
 public import petsc.error; // Error handling interface
+public import petsc.types;
 
-alias int PetscMPIInt;
+
 alias MPI_COMM_SELF PETSC_COMM_SELF;
 
 // Note: Can be either C++ or C 
@@ -20,6 +21,8 @@ extern(C) {
   PetscErrorCode PetscSynchronizedPrintf(MPI_Comm,const char*,...);
   PetscErrorCode PetscSynchronizedFlush(MPI_Comm);
   PetscErrorCode PetscGetPetscDir(const char**);
+  
+  PetscErrorCode PetscSleep(PetscReal);
 }
 
 extern(C) {
