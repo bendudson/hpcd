@@ -22,7 +22,7 @@ OBJC = $(SOURCEC:%.c=%.c.o)
 	$(CC) -o $@ -c $< $(CINCLUDE)
 
 %.o: %.d
-	$(DC) -H -c $< $(DINCLUDE)
+	$(DC) -H -c $< -I$(TOP) $(DINCLUDE)
 
 .PHONY: all
 all: $(DIRS) $(TARGET) $(LIBTARGET)
@@ -40,7 +40,7 @@ $(DIRS):
 # Library target
 ####################################################################
 
-$(LIBTARGET): $(OBJD) $(OBJC) makefile ../make.config
+$(LIBTARGET): $(OBJD) $(OBJC) makefile $(TOP)/make.config
 	$(AR) cru $(LIBTARGET) $(OBJD) $(OBJC)
 	$(RANLIB) $(LIBTARGET)
 

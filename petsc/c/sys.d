@@ -5,8 +5,8 @@
 import std.algorithm, std.array, std.string;
 
 public import mpi.mpi;
-public import petsc.error; // Error handling interface
-public import petsc.types;
+public import petsc.c.error; // Error handling interface
+public import petsc.c.types;
 
 
 alias MPI_COMM_SELF PETSC_COMM_SELF;

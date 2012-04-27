@@ -1,8 +1,10 @@
 // Defines some widely used data types
 
 alias int PetscBool;
-alias double PetscReal;
+alias int PetscInt;
 alias int PetscMPIInt;
+alias double PetscReal;
+alias double PetscScalar;
 
 alias int PetscClassId;
 

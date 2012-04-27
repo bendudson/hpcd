@@ -2,9 +2,9 @@
     Defines profile/logging in PETSc.
 */
 
-import petsc.error;
-import petsc.viewer;
-public import petsc.types;
+import petsc.c.error;
+import petsc.c.viewer;
+public import petsc.c.types;
 import mpi.mpi;
 
 alias int    PetscLogEvent;
@@ -14,7 +14,7 @@ alias double PetscLogDouble;
 immutable PETSC_EVENT = 1311311;
 
 ///////////////////////////////////////////////////////////////
-// External functions
+// Global variables
 //
 
 extern(C) {
@@ -23,7 +23,13 @@ extern(C) {
   // Global flop counter
   extern __gshared PetscLogDouble  _TotalFlops;
   extern __gshared PetscLogDouble petsc_tmp_flops;
+}
 
+///////////////////////////////////////////////////////////////
+// External functions
+//
+
+extern(C) {
   // Initialization functions
   PetscErrorCode  PetscLogBegin();
   PetscErrorCode  PetscLogAllBegin();
@@ -132,6 +138,9 @@ extern(C) {
   extern __gshared PetscStageLog _stageLog;
   
   extern __gshared PetscErrorCode function(PetscLogEvent,int,PetscObject,PetscObject,PetscObject,PetscObject) _PetscLogPLB;
+  extern __gshared PetscErrorCode function(PetscLogEvent,int,PetscObject,PetscObject,PetscObject,PetscObject) _PetscLogPLE;
+  extern __gshared PetscErrorCode function(PetscObject) _PetscLogPHC;
+  extern __gshared PetscErrorCode function(PetscObject) _PetscLogPHD;
 }
 
 /*
@@ -154,10 +163,15 @@ PetscErrorCode PetscLogEventBegin(PetscLogEvent e, PetscObject o1=null, PetscObj
 }
 
 /*
-  #define PetscLogFlops(n) (petsc_tmp_flops = (PETSC_FLOPS_PER_OP*((PetscLogDouble)n)), ((petsc_tmp_flops < 0) ? PETSC_ERR_FLOP_COUNT : (_TotalFlops += petsc_tmp_flops,0)))
+  PetscLogFlops(n) (_TotalFlops += PETSC_FLOPS_PER_OP*((PetscLogDouble)n),0)
  */
 
+immutable PETSC_FLOPS_PER_OP = 1.0;
 
+PetscErrorCode PetscLogFlops(PetscLogDouble f) {
+  _TotalFlops += PETSC_FLOPS_PER_OP*f;
+  return 0;
+}
 
 /*
 #define PetscLogEventEnd(e,o1,o2,o3,o4) \
@@ -165,3 +179,13 @@ PetscErrorCode PetscLogEventBegin(PetscLogEvent e, PetscObject o1=null, PetscObj
     (*_PetscLogPLE)((e),0,(PetscObject)(o1),(PetscObject)(o2),(PetscObject)(o3),(PetscObject)(o4)) : 0 ) || \
   PETSC_LOG_EVENT_MPE_END(e))
  */
+
+PetscErrorCode PetscLogEventEnd(PetscLogEvent e, PetscObject o1=null, PetscObject o2=null,
+                                PetscObject o3=null, PetscObject o4=null) {
+  if(_PetscLogPLE && 
+     _stageLog.stageInfo[_stageLog.curStage].perfInfo.active &&
+     _stageLog.stageInfo[_stageLog.curStage].eventLog.eventInfo[e].active) {
+    _PetscLogPLE(e,0,o1,o2,o3,o4);
+  }
+  return 0;
+}

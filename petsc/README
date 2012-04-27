@@ -1,0 +1,26 @@
+D interface to PETSc
+====================
+
+A set of classes built on the C interface. Intended to be close to the
+PETSc4Py for familiarity.
+
+C interface
+===========
+
+petsc.c.* contains direct interface to C functions. API is the same as
+in C (refer to the online documentation) apart for the following differences:
+
+ Initialize takes D style args and optional help string
+
+   void PetscInitialize(string[] args, string help="");
+
+ LogEvent* have optional arguments, rather than passing zeros
+ (and are functions, rather than macros)
+
+    PetscErrorCode PetscLogEventBegin(PetscLogEvent e, PetscObject o1=null, PetscObject o2=null,
+                                  PetscObject o3=null, PetscObject o4=null);
+
+    PetscErrorCode PetscLogEventEnd(PetscLogEvent e, PetscObject o1=null, PetscObject o2=null,
+                                PetscObject o3=null, PetscObject o4=null);
+
+

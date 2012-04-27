@@ -4,7 +4,7 @@
 // PETSC_DIR/src/sys/examples/tutorials/ex1.c
 //
 
-import petsc.sys;
+import petsc.c.sys;
 
 auto help = "Introductory example that illustrates printing.\n\n";
 

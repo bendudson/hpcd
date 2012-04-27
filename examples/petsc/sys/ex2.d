@@ -6,7 +6,7 @@
 
 auto help = "Synchronized printing.\n\n";
 
-import petsc.sys;
+import petsc.c.sys;
 
 int main(string[] args) {
   PetscErrorCode ierr;
