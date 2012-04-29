@@ -1,3 +1,62 @@
 
+import mpi.mpi;
+import petsc.c.sys;
+
 alias void* PetscViewer;
 alias char* PetscViewerType;
+
+extern(C) {
+  PetscViewer  PETSC_VIEWER_STDOUT_(MPI_Comm);
+  PetscErrorCode  PetscViewerASCIIGetStdout(MPI_Comm,PetscViewer*);
+  PetscViewer  PETSC_VIEWER_STDERR_(MPI_Comm);
+  PetscErrorCode  PetscViewerASCIIGetStderr(MPI_Comm,PetscViewer*);
+  PetscViewer  PETSC_VIEWER_DRAW_(MPI_Comm);
+  PetscViewer  PETSC_VIEWER_SOCKET_(MPI_Comm);
+  PetscViewer  PETSC_VIEWER_BINARY_(MPI_Comm);
+  //PetscViewer  PETSC_VIEWER_MATLAB_(MPI_Comm);
+}
+
+PetscViewer PETSC_VIEWER_STDERR_SELF() {
+  return PETSC_VIEWER_STDERR_(PETSC_COMM_SELF);
+}
+PetscViewer PETSC_VIEWER_STDERR_WORLD() {
+  return PETSC_VIEWER_STDERR_(PETSC_COMM_WORLD);
+}
+
+PetscViewer PETSC_VIEWER_STDOUT_SELF() {
+  return PETSC_VIEWER_STDOUT_(PETSC_COMM_SELF);
+}
+PetscViewer PETSC_VIEWER_STDOUT_WORLD() {
+  return PETSC_VIEWER_STDOUT_(PETSC_COMM_WORLD);
+}
+
+PetscViewer PETSC_VIEWER_DRAW_SELF() {
+  return PETSC_VIEWER_DRAW_(PETSC_COMM_SELF);
+}
+PetscViewer PETSC_VIEWER_DRAW_WORLD() {
+  return PETSC_VIEWER_DRAW_(PETSC_COMM_WORLD);
+}
+
+PetscViewer PETSC_VIEWER_SOCKET_SELF() {
+  return PETSC_VIEWER_SOCKET_(PETSC_COMM_SELF);
+}
+PetscViewer PETSC_VIEWER_SOCKET_WORLD() {
+  return PETSC_VIEWER_SOCKET_(PETSC_COMM_WORLD);
+}
+
+PetscViewer PETSC_VIEWER_BINARY_SELF() {
+  return PETSC_VIEWER_BINARY_(PETSC_COMM_SELF);
+}
+PetscViewer PETSC_VIEWER_BINARY_WORLD() {
+  return PETSC_VIEWER_BINARY_(PETSC_COMM_WORLD);
+}
+
+/*
+PetscViewer PETSC_VIEWER_MATLAB_SELF() {
+  return PETSC_VIEWER_MATLAB_(PETSC_COMM_SELF);
+}
+PetscViewer PETSC_VIEWER_MATLAB_WORLD() {
+  return PETSC_VIEWER_MATLAB_(PETSC_COMM_WORLD);
+}
+*/
+
