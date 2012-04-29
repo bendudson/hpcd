@@ -8,8 +8,9 @@ public import mpi.mpi;
 public import petsc.c.error; // Error handling interface
 public import petsc.c.types;
 
-
 alias MPI_COMM_SELF PETSC_COMM_SELF;
+
+immutable PETSC_DECIDE = -1;
 
 // Note: Can be either C++ or C 
 extern(C) {

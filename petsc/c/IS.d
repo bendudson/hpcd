@@ -9,4 +9,4 @@ extern(C) {
 }
 
 alias void* IS;
-
+alias void* ISLocalToGlobalMapping;
