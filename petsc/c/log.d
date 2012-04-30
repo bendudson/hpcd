@@ -143,14 +143,8 @@ extern(C) {
   extern __gshared PetscErrorCode function(PetscObject) _PetscLogPHD;
 }
 
-/*
-#define PetscLogEventBegin(e,o1,o2,o3,o4) \
-  (((_PetscLogPLB && _stageLog->stageInfo[_stageLog->curStage].perfInfo.active && _stageLog->stageInfo[_stageLog->curStage].eventLog->eventInfo[e].active) ? \
-    (*_PetscLogPLB)((e),0,(PetscObject)(o1),(PetscObject)(o2),(PetscObject)(o3),(PetscObject)(o4)) : 0 ) || \
-  PETSC_LOG_EVENT_MPE_BEGIN(e))
-
 // Functions to replace PETSc macros
-*/
+
 PetscErrorCode PetscLogEventBegin(PetscLogEvent e, PetscObject o1=null, PetscObject o2=null,
                                   PetscObject o3=null, PetscObject o4=null) {
   PetscErrorCode ierr = 0;
@@ -162,23 +156,12 @@ PetscErrorCode PetscLogEventBegin(PetscLogEvent e, PetscObject o1=null, PetscObj
   return ierr;
 }
 
-/*
-  PetscLogFlops(n) (_TotalFlops += PETSC_FLOPS_PER_OP*((PetscLogDouble)n),0)
- */
-
 immutable PETSC_FLOPS_PER_OP = 1.0;
 
 PetscErrorCode PetscLogFlops(PetscLogDouble f) {
   _TotalFlops += PETSC_FLOPS_PER_OP*f;
   return 0;
 }
-
-/*
-#define PetscLogEventEnd(e,o1,o2,o3,o4) \
-  (((_PetscLogPLE && _stageLog->stageInfo[_stageLog->curStage].perfInfo.active && _stageLog->stageInfo[_stageLog->curStage].eventLog->eventInfo[e].active) ? \
-    (*_PetscLogPLE)((e),0,(PetscObject)(o1),(PetscObject)(o2),(PetscObject)(o3),(PetscObject)(o4)) : 0 ) || \
-  PETSC_LOG_EVENT_MPE_END(e))
- */
 
 PetscErrorCode PetscLogEventEnd(PetscLogEvent e, PetscObject o1=null, PetscObject o2=null,
                                 PetscObject o3=null, PetscObject o4=null) {
@@ -189,3 +172,45 @@ PetscErrorCode PetscLogEventEnd(PetscLogEvent e, PetscObject o1=null, PetscObjec
   }
   return 0;
 }
+
+/*
+PetscErrorCode  PetscStageLogGetEventPerfLog(PetscStageLog stageLog, int stage, PetscEventPerfLog *eventLog)
+{
+  PetscFunctionBegin;
+  PetscValidPointer(eventLog,3);
+  if ((stage < 0) || (stage >= stageLog->numStages)) {
+    SETERRQ2(PETSC_COMM_SELF,PETSC_ERR_ARG_OUTOFRANGE, "Invalid stage %d should be in [0,%d)", stage, stageLog->numStages);
+  }
+  *eventLog = stageLog->stageInfo[stage].eventLog;
+  PetscFunctionReturn(0);
+}
+*/
+
+ /*
+#define PetscPreLoadBegin(flag,name) \
+do {\
+  PetscBool      PetscPreLoading = flag;\
+  int            PetscPreLoadMax,PetscPreLoadIt;\
+  PetscLogStage  _stageNum;\
+  PetscErrorCode _3_ierr;	\
+  _3_ierr = PetscOptionsGetBool(PETSC_NULL,"-preload",&PetscPreLoading,PETSC_NULL);CHKERRQ(_3_ierr);\
+  PetscPreLoadMax = (int)(PetscPreLoading);\
+  PetscPreLoadingUsed = PetscPreLoading ? PETSC_TRUE : PetscPreLoadingUsed;\
+  for (PetscPreLoadIt=0; PetscPreLoadIt<=PetscPreLoadMax; PetscPreLoadIt++) {\
+    PetscPreLoadingOn = PetscPreLoading;\
+    _3_ierr = PetscBarrier(PETSC_NULL);CHKERRQ(_3_ierr);\
+    if (PetscPreLoadIt>0) {\
+      _3_ierr = PetscLogStageGetId(name,&_stageNum);CHKERRQ(_3_ierr);\
+    } else {\
+      _3_ierr = PetscLogStageRegister(name,&_stageNum);CHKERRQ(_3_ierr); \
+    }\
+    _3_ierr = PetscLogStageSetActive(_stageNum,(PetscBool)(!PetscPreLoadMax || PetscPreLoadIt));\
+    _3_ierr = PetscLogStagePush(_stageNum);CHKERRQ(_3_ierr);
+
+#define PetscPreLoadEnd() \
+    _3_ierr = PetscLogStagePop();CHKERRQ(_3_ierr);\
+    PetscPreLoading = PETSC_FALSE;\
+  }\
+} while (0)
+
+ */

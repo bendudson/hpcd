@@ -12,7 +12,9 @@ alias MPI_COMM_SELF PETSC_COMM_SELF;
 
 immutable PETSC_DECIDE = -1;
 
-// Note: Can be either C++ or C 
+//PetscCopyMode  - Determines how an array passed to certain functions is copied or retained
+enum PetscCopyMode { COPY_VALUES, OWN_POINTER, USE_POINTER};
+
 extern(C) {
   PetscErrorCode PetscInitialize(int*,char***,const char*,const char*);
   PetscErrorCode PetscFinalize();
@@ -29,7 +31,6 @@ extern(C) {
 extern(C) {
   extern __gshared MPI_Comm PETSC_COMM_WORLD;
 }
-
 
 // A wrapper to convert D's arguments to C style
 // and handle ierr

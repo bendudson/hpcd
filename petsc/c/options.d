@@ -4,6 +4,9 @@ import petsc.c.error;
 import petsc.c.viewer;
 import mpi.mpi : MPI_Comm;
 
+import std.string;
+import std.conv;
+
 extern(C) {
   
   PetscErrorCode   PetscOptionsHasName(const char*,const char*,PetscBool *);
@@ -48,6 +51,17 @@ extern(C) {
   PetscErrorCode  PetscOptionsMonitorSet(PetscErrorCode function(const char*, const char*, void*), void *, PetscErrorCode function(void**));
   PetscErrorCode  PetscOptionsMonitorCancel();
   PetscErrorCode  PetscOptionsMonitorDefault(const char*, const char*, void *);
+}
+
+//PetscErrorCode   PetscOptionsGetString(const char*,const char*,char*,size_t,PetscBool *);
+
+immutable PETSC_MAX_PATH_LEN = 4096;
+
+PetscErrorCode   PetscOptionsGetString(const char* pre, in string name, out string result, out PetscBool flg) {
+  char c[PETSC_MAX_PATH_LEN];
+  PetscErrorCode ierr = PetscOptionsGetString(pre, toStringz(name), c.ptr, PETSC_MAX_PATH_LEN, &flg);
+  result = to!string(c);
+  return ierr;
 }
 
 // Global variables

@@ -1,6 +1,6 @@
 // Defines some widely used data types
 
-alias int PetscBool;
+enum PetscBool {FALSE=0, TRUE=1};
 alias int PetscInt;
 alias int PetscMPIInt;
 alias double PetscReal;
